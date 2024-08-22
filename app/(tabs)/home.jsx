@@ -1,32 +1,31 @@
 import { useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { FlatList, Image, RefreshControl, Text, View } from "react-native";
-
+import { getUserPosts } from "../../lib/appwrite";
 import { images } from "../../constants";
 import useAppwrite from "../../lib/useAppwrite";
 import { getAllPosts, getLatestPosts } from "../../lib/appwrite";
 import { EmptyState, SearchInput, Trending, VideoCard } from "../../components";
-
+import { useGlobalContext } from "../../context/GlobalProvider";
+import { useColorScheme } from "nativewind";
+import { Switch } from "react-native";
+import { StatusBar } from "expo-status-bar";
+import { Bookmarked } from "../../lib/appwrite";
 const Home = () => {
+  const { user, setUser, setIsLogged } = useGlobalContext();
+  const {colorScheme, toggleColorScheme} = useColorScheme()
   const { data: posts, refetch } = useAppwrite(getAllPosts);
   const { data: latestPosts } = useAppwrite(getLatestPosts);
-
+  
   const [refreshing, setRefreshing] = useState(false);
-
   const onRefresh = async () => {
     setRefreshing(true);
     await refetch();
     setRefreshing(false);
   };
-
-  // one flatlist
-  // with list header
-  // and horizontal flatlist
-
-  //  we cannot do that with just scrollview as there's both horizontal and vertical scroll (two flat lists, within trending)
-
+ 
   return (
-    <SafeAreaView className="bg-primary">
+    <SafeAreaView className="dark:bg-primary">
       <FlatList
         data={posts}
         keyExtractor={(item) => item.$id}
@@ -38,17 +37,23 @@ const Home = () => {
             creator={item.creator.username}
             avatar={item.creator.avatar}
           />
+
         )}
         ListHeaderComponent={() => (
           <View className="flex my-6 px-4 space-y-6">
-            <View className="flex justify-between items-start flex-row mb-6">
+
+            <View className="flex justify-between items-start flex-row mb-6 sticky top-0">
+              <View className="flex flex-row gap-4">
               <View>
-                <Text className="font-pmedium text-sm text-gray-100">
+                <Text className="font-pmedium text-sm dark:text-gray-100 ">
                   Welcome Back
                 </Text>
-                <Text className="text-2xl font-psemibold text-white">
-                  JSMastery
+          
+                <Text className="text-2xl font-psemibold dark:text-white">
+                {user?.username}
                 </Text>
+                </View>
+                <Switch value={colorScheme === 'dark'} onChange={toggleColorScheme} />
               </View>
 
               <View className="mt-1.5">
@@ -63,7 +68,7 @@ const Home = () => {
             <SearchInput />
 
             <View className="w-full flex-1 pt-5 pb-8">
-              <Text className="text-lg font-pregular text-gray-100 mb-3">
+              <Text className="text-lg font-pregular dark:text-gray-100 mb-3">
                 Latest Videos
               </Text>
 
@@ -81,6 +86,7 @@ const Home = () => {
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
         }
       />
+         <StatusBar style={colorScheme ==='dark' ? 'light' : 'dark'}/>
     </SafeAreaView>
   );
 };

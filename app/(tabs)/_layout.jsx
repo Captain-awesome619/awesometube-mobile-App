@@ -1,14 +1,19 @@
 import { StatusBar } from "expo-status-bar";
 import { Redirect, Tabs } from "expo-router";
 import { Image, Text, View } from "react-native";
-
+import { useColorScheme } from "nativewind";
 import { icons } from "../../constants";
 import { Loader } from "../../components";
 import { useGlobalContext } from "../../context/GlobalProvider";
 
+
+
 const TabIcon = ({ icon, color, name, focused }) => {
   return (
+     
+   
     <View className="flex items-center justify-center gap-2">
+    
       <Image
         source={icon}
         resizeMode="contain"
@@ -32,6 +37,7 @@ const TabLayout = () => {
 
   return (
     <>
+
       <Tabs
         screenOptions={{
           tabBarActiveTintColor: "#FFA001",
@@ -115,3 +121,6 @@ const TabLayout = () => {
 };
 
 export default TabLayout;
+
+
+

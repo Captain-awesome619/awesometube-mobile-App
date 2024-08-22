@@ -1,20 +1,20 @@
 import { useState } from "react";
 import { router, usePathname } from "expo-router";
 import { View, TouchableOpacity, Image, TextInput, Alert } from "react-native";
-
+import { useColorScheme } from "nativewind";
 import { icons } from "../constants";
 
 const SearchInput = ({ initialQuery }) => {
   const pathname = usePathname();
   const [query, setQuery] = useState(initialQuery || "");
-
+  const {colorScheme} = useColorScheme()
   return (
-    <View className="flex flex-row items-center space-x-4 w-full h-16 px-4 bg-black-100 rounded-2xl border-2 border-black-200 focus:border-secondary">
+    <View className="flex flex-row items-center space-x-4 w-full h-16 px-4 bg-black-100 dark:bg-white  rounded-2xl border-2 border-black-200 focus:border-secondary">
       <TextInput
-        className="text-base mt-0.5 text-white flex-1 font-pregular"
+        className="text-base mt-0.5  text-white  dark:text-black flex-1 font-pregular"
         value={query}
         placeholder="Search a video topic"
-        placeholderTextColor="#CDCDE0"
+        placeholderTextColor={colorScheme === 'dark' ? "black" : "#CDCDE0"}
         onChangeText={(e) => setQuery(e)}
       />
 

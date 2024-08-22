@@ -1,13 +1,13 @@
 import { router } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { View, Image, FlatList, TouchableOpacity } from "react-native";
-
+import { StatusBar } from "react-native";
 import { icons } from "../../constants";
 import useAppwrite from "../../lib/useAppwrite";
 import { getUserPosts, signOut } from "../../lib/appwrite";
 import { useGlobalContext } from "../../context/GlobalProvider";
 import { EmptyState, InfoBox, VideoCard } from "../../components";
-
+import { useColorScheme } from "nativewind";
 const Profile = () => {
   const { user, setUser, setIsLogged } = useGlobalContext();
   const { data: posts } = useAppwrite(() => getUserPosts(user.$id));
@@ -19,9 +19,10 @@ const Profile = () => {
 
     router.replace("/sign-in");
   };
-
+  const {colorScheme} = useColorScheme()
   return (
-    <SafeAreaView className="bg-primary h-full">
+    <SafeAreaView className="dark:bg-primary h-full">
+      <StatusBar style={colorScheme ==='dark' ? 'light' : 'dark'}/>
       <FlatList
         data={posts}
         keyExtractor={(item) => item.$id}
@@ -56,8 +57,9 @@ const Profile = () => {
             <View className="w-16 h-16 border border-secondary rounded-lg flex justify-center items-center">
               <Image
                 source={{ uri: user?.avatar }}
-                className="w-[90%] h-[90%] rounded-lg"
+                className="w-full h-full rounded-lg bg-white dark:bg-black "
                 resizeMode="cover"
+                tintColor={colorScheme === "light" ? "black" : "white"}
               />
             </View>
 
