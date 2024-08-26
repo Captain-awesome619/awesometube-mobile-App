@@ -4,7 +4,7 @@ import { View, TouchableOpacity, Image, TextInput, Alert } from "react-native";
 import { useColorScheme } from "nativewind";
 import { icons } from "../constants";
 import { searchPosts } from "../lib/appwrite";
-const SearchInput = ({ initialQuery }) => {
+const SearchInput2 = ({ initialQuery }) => {
   const pathname = usePathname();
   const [query, setQuery] = useState(initialQuery || "");
   const {colorScheme} = useColorScheme()
@@ -36,4 +36,4 @@ const SearchInput = ({ initialQuery }) => {
   );
 };
 
-export default SearchInput;
+export default SearchInput2;

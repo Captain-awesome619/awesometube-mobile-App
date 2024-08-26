@@ -1,56 +1,42 @@
 import { useState,useEffect } from "react";
 import { ResizeMode, Video } from "expo-av";
 import { View, Text, TouchableOpacity, Image } from "react-native";
-import { useColorScheme } from "nativewind";
+import { deleteBookmarked } from "../lib/appwrite";
 import { icons } from "../constants";
-import { Alert } from "react-native";
-import { Bookmarked } from "../lib/appwrite";
-import { useGlobalContext } from "../context/GlobalProvider";
-
-
-const VideoCard = ({ title, creator, avatar, thumbnail, video, start, end}) => {
+import { useColorScheme } from "nativewind";
+const VideoCard2 = ({ title, creator, avatar, thumbnail, video,id,refetch ,start,end}) => {
+ 
+  const [posts,setPosts] = useState([])
   const [play, setPlay] = useState(false);
-  const {colorScheme} = useColorScheme()
-  const { user, setUser, setIsLogged } = useGlobalContext();
-  
-  const [liked,setLiked] = useState({
-    title1 : "",
-    thumbnail1 :null,
-    video1 :"",
-    creator1 : '',
-    avatar1 : ''
-  })
-  function trigger() {
-    setLiked({title1:title,thumbnail1:thumbnail,video1:video,creator1:creator,avatar1:avatar })
+const [ID,SETID ] = useState(null)
+const {colorScheme} = useColorScheme()
+ useEffect(() => {
+    if (ID !== null) {
+       handleRemoveVideo(ID)
+    }
+  }, [ID]); 
+  function trig() {
+    SETID(id)
   }
-   const book = async () => {
-    start()
-    try {
-      await 
-      Bookmarked(liked, user.$id);
-      
-    } catch (error) {
-      Alert.alert("Error", error.message);
-    } finally{
-      end()
-    }
+  const removeVideoFromState = (id) => {
+    setPosts(posts.filter(post => post.id !== id));
   };
-
-  useEffect(() => {
-    if (liked.thumbnail1 !== null) {
-       book()
-    }
-  }, [liked]); 
-
-
+  const handleRemoveVideo = async (ID) => {
+    start()
+    await deleteBookmarked(ID); 
+    refetch()// Call to Appwrite SDK to remove the document
+    removeVideoFromState(ID)
+    end()
+  };
   return (
     <View className="flex flex-col items-center px-4 mb-14">
+        
       <View className="flex flex-row gap-3 items-start">
         <View className="flex justify-center items-center flex-row flex-1">
           <View className="w-[46px] h-[46px] rounded-lg border border-secondary flex justify-center items-center p-0.5">
             <Image
               source={{ uri: avatar }}
-              className="w-full h-full rounded-lg bg-white dark:bg-black "
+              className="w-full h-full rounded-lg    bg-white dark:bg-black"
               resizeMode="cover"
               tintColor={colorScheme === "light" ? "black" : "white"}
             />
@@ -58,7 +44,7 @@ const VideoCard = ({ title, creator, avatar, thumbnail, video, start, end}) => {
 
           <View className="flex justify-center flex-1 ml-3 gap-y-1">
             <Text
-              className="font-psemibold text-sm  text-black  dark:text-white"
+             className="font-psemibold text-sm  text-black  dark:text-white"
               numberOfLines={1}
             >
               {title}
@@ -72,11 +58,11 @@ const VideoCard = ({ title, creator, avatar, thumbnail, video, start, end}) => {
           </View>
         </View>
 
-        <View className="pt-2" onTouchStart={trigger}  >
-          <Image source={icons.plus} className="w-5 h-5" resizeMode="contain" />
+        <View className="pt-2" onTouchStart={trig}>
+          <Image source={icons.bin} className="w-5 h-5" resizeMode="contain" tintColor={"orange"} />
         </View>
       </View>
-      
+
       {play ? (
         <Video
           source={{ uri: video }}
@@ -113,4 +99,4 @@ const VideoCard = ({ title, creator, avatar, thumbnail, video, start, end}) => {
   );
 };
 
-export default VideoCard;
+export default VideoCard2;

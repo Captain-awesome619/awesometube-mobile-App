@@ -5,10 +5,11 @@ import { useColorScheme } from "nativewind";
 import { icons } from "../../constants";
 import { Loader } from "../../components";
 import { useGlobalContext } from "../../context/GlobalProvider";
-
+import { useState } from "react";
 
 
 const TabIcon = ({ icon, color, name, focused }) => {
+
   return (
      
    
@@ -61,6 +62,7 @@ const TabLayout = () => {
                 icon={icons.home}
                 color={color}
                 name="Home"
+               
                 focused={focused}
               />
             ),
@@ -75,6 +77,7 @@ const TabLayout = () => {
               <TabIcon
                 icon={icons.bookmark}
                 color={color}
+              
                 name="Bookmark"
                 focused={focused}
               />

@@ -8,9 +8,16 @@ import { getUserPosts, signOut } from "../../lib/appwrite";
 import { useGlobalContext } from "../../context/GlobalProvider";
 import { EmptyState, InfoBox, VideoCard } from "../../components";
 import { useColorScheme } from "nativewind";
+import { useEffect,useState } from "react";
 const Profile = () => {
   const { user, setUser, setIsLogged } = useGlobalContext();
   const { data: posts } = useAppwrite(() => getUserPosts(user.$id));
+const [data,setdata] = useState()
+
+  useEffect(() => {
+    setdata(posts)
+  }, [posts]); 
+
 
   const logout = async () => {
     await signOut();
@@ -22,6 +29,7 @@ const Profile = () => {
   const {colorScheme} = useColorScheme()
   return (
     <SafeAreaView className="dark:bg-primary h-full">
+      {console.log(data)}
       <StatusBar style={colorScheme ==='dark' ? 'light' : 'dark'}/>
       <FlatList
         data={posts}
@@ -59,7 +67,7 @@ const Profile = () => {
                 source={{ uri: user?.avatar }}
                 className="w-full h-full rounded-lg bg-white dark:bg-black "
                 resizeMode="cover"
-                tintColor={colorScheme === "light" ? "black" : "white"}
+                tintColor={colorScheme === "light" ? "#000" : "#ffff"}
               />
             </View>
 
