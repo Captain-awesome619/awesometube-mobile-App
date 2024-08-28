@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Link, router } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { View, Text, ScrollView, Dimensions, Alert, Image } from "react-native";
-
+import { useColorScheme } from "nativewind";
 import { images } from "../../constants";
 import { createUser } from "../../lib/appwrite";
 import { CustomButton, FormField } from "../../components";
@@ -36,9 +36,9 @@ const SignUp = () => {
       setSubmitting(false);
     }
   };
-
+  const {colorScheme} = useColorScheme()
   return (
-    <SafeAreaView className="bg-primary h-full">
+    <SafeAreaView className="dark:bg-primary h-full">
       <ScrollView>
         <View
           className="w-full flex justify-center h-full px-4 my-6"
@@ -50,6 +50,7 @@ const SignUp = () => {
             source={images.logo}
             resizeMode="contain"
             className="w-[115px] h-[34px]"
+            tintColor= {colorScheme == "dark" ? "black" : ""}
           />
 
           <Text className="text-2xl font-semibold  dark:text-white mt-10 font-psemibold">
@@ -86,7 +87,7 @@ const SignUp = () => {
           />
 
           <View className="flex justify-center pt-5 flex-row gap-2">
-            <Text className="text-lg text-gray-100 font-pregular">
+            <Text className="text-lg dark:text-gray-100 font-pregular">
               Have an account already?
             </Text>
             <Link

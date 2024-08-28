@@ -41,7 +41,6 @@ const Bookmark = () => {
     {loader == true ? <ActivityIndicator size="large" color="black"  className="absolute top-[50%] opacity-[5] z-50 left-[50%]  "/> : ""}
     <SafeAreaView className={loader == true ? "dark:bg-primary opacity-[0.2] h-full" : "dark:bg-primary h-full "}>
       <StatusBar style={colorScheme ==='dark' ? 'light' : 'dark'}/>
-  {console.log(posts)}
       <FlatList
       className="flex flex-col"
         data={posts}
